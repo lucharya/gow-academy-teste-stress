@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/google/uuid"
@@ -68,5 +69,5 @@ func (h *Handler) ContarProgramadores(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/plain")
-	w.Write([]byte(string(rune(count + '0'))))
+	w.Write([]byte(strconv.Itoa(count)))
 }
