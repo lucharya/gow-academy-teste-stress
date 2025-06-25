@@ -10,6 +10,10 @@ COPY ./internal ./internal
 
 RUN go build -o main ./cmd/app
 
-EXPOSE 8081
+COPY entrypoint.sh .
 
-CMD ["./main"]
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
+
+EXPOSE 8081
