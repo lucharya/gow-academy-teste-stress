@@ -1,4 +1,22 @@
 services:
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: rootqwe123
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: '1.5GB'
+
   api1:
     build: .
     hostname: api1
@@ -9,6 +27,7 @@ services:
       DB_PASSWORD: rootqwe123
       DB_NAME: testdb
       DB_HOST: db
+      INIT_SCHEMA: "true"
     depends_on:
       - db
     deploy:
@@ -29,6 +48,7 @@ services:
       DB_HOST: db
     depends_on:
       - db
+      - api1
     deploy:
       resources:
         limits:
@@ -49,22 +69,6 @@ services:
         limits:
           cpus: '0.25'
           memory: '0.5GB'
-
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: rootqwe123
-      POSTGRES_DB: testdb
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    deploy:
-      resources:
-        limits:
-          cpus: '0.75'
-          memory: '1.5GB'
 
 volumes:
   pgdata:
